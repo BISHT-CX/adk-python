@@ -401,19 +401,19 @@ def _load_skill_from_gcs_dir(
         f" name '{skill_name_expected}'."
     )
 
-  def _load_files_in_dir(subdir: str) -> Dict[str, Union[str, bytes]]:
+def _load_files_in_dir(subdir: str) -> Dict[str, Union[str, bytes]]:
     prefix = f"{skill_dir_prefix}{subdir}/"
     blobs = bucket.list_blobs(prefix=prefix)
     result = {}
 
-   for blob in blobs:
-    relative_path = blob.name[len(prefix):]
-    if not relative_path:
+    for blob in blobs:
+      relative_path = blob.name[len(prefix):]
+      if not relative_path:
         continue
 
-    # Prevent path traversal via malicious GCS blob names
-    normalized = os.path.normpath(relative_path)
-    if normalized.startswith('..') or os.path.isabs(normalized):
+      # Prevent path traversal via malicious GCS blob names
+      normalized = os.path.normpath(relative_path)
+      if normalized.startswith('..') or os.path.isabs(normalized):
         raise ValueError(
             f"Unsafe path in skill resource: {relative_path!r}"
         )
