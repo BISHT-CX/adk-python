@@ -401,7 +401,7 @@ def _load_skill_from_gcs_dir(
         f" name '{skill_name_expected}'."
     )
 
-def _load_files_in_dir(subdir: str) -> Dict[str, Union[str, bytes]]:
+  def _load_files_in_dir(subdir: str) -> Dict[str, Union[str, bytes]]:
     prefix = f"{skill_dir_prefix}{subdir}/"
     blobs = bucket.list_blobs(prefix=prefix)
     result = {}
