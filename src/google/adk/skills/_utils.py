@@ -421,7 +421,7 @@ def _load_skill_from_gcs_dir(
       try:
         result[normalized] = blob.download_as_text()
       except UnicodeDecodeError:
-        result[relative_path] = blob.download_as_bytes()
+        result[normalized] = blob.download_as_bytes()
     return result
 
   references = _load_files_in_dir("references")
