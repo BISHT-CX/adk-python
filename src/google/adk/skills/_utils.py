@@ -15,8 +15,9 @@
 """Utility functions for Agent Skills."""
 
 from __future__ import annotations
-import os
+
 import logging
+import os
 import pathlib
 from typing import Union
 
@@ -407,7 +408,7 @@ def _load_skill_from_gcs_dir(
     result = {}
 
     for blob in blobs:
-      relative_path = blob.name[len(prefix):]
+      relative_path = blob.name[len(prefix) :]
       if not relative_path:
         continue
 
@@ -416,17 +417,13 @@ def _load_skill_from_gcs_dir(
 
       # Reject absolute paths and traversal sequences
       if p.is_absolute() or ".." in p.parts:
-        raise ValueError(
-            f"Unsafe path in skill resource: {relative_path!r}"
-        )
+        raise ValueError(f"Unsafe path in skill resource: {relative_path!r}")
 
       normalized = p.as_posix()
 
       # Prevent silent file overwrites via path aliasing
       if normalized in result:
-        raise ValueError(
-            f"Duplicate normalized path detected: {normalized!r}"
-        )
+        raise ValueError(f"Duplicate normalized path detected: {normalized!r}")
 
       # NOTE: Final path safety enforced during materialization
       # via realpath + commonpath checks in skill_toolset.py

@@ -520,7 +520,7 @@ class _SkillScriptCodeExecutor:
       )
 
     # Build the boilerplate extract string
-  
+
     code_lines = [
         "import os",
         "import tempfile",
@@ -534,8 +534,8 @@ class _SkillScriptCodeExecutor:
         "  with tempfile.TemporaryDirectory() as td:",
         "    _real_base = os.path.realpath(td)",
         "    for rel_path, content in _files.items():",
-        "      if os.path.isabs(rel_path):",                       
-        "        raise ValueError(f'Absolute path rejected: {rel_path!r}')", 
+        "      if os.path.isabs(rel_path):",
+        "        raise ValueError(f'Absolute path rejected: {rel_path!r}')",
         "      _safe = os.path.realpath(os.path.join(td, rel_path))",
         "      if os.path.commonpath([_real_base, _safe]) != _real_base:",
         "        raise ValueError(f'Path traversal detected: {rel_path!r}')",
