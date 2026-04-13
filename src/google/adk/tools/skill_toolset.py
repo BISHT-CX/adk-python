@@ -534,10 +534,10 @@ class _SkillScriptCodeExecutor:
         "  with tempfile.TemporaryDirectory() as td:",
         "    _real_base = os.path.realpath(td)",
         "    for rel_path, content in _files.items():",
-        "      if os.path.isabs(rel_path):",                          # ← ADD
-        "        raise ValueError(f'Absolute path rejected: {rel_path!r}')",  # ← ADD
+        "      if os.path.isabs(rel_path):",                       
+        "        raise ValueError(f'Absolute path rejected: {rel_path!r}')", 
         "      _safe = os.path.realpath(os.path.join(td, rel_path))",
-        "      if os.path.commonpath([_real_base, _safe]) != _real_base:",  # ← updated
+        "      if os.path.commonpath([_real_base, _safe]) != _real_base:",
         "        raise ValueError(f'Path traversal detected: {rel_path!r}')",
         "      full_path = _safe",
         "      os.makedirs(os.path.dirname(full_path), exist_ok=True)",
