@@ -521,25 +521,29 @@ class _SkillScriptCodeExecutor:
 
     # Build the boilerplate extract string
     code_lines = [
-        "import os",
-        "import tempfile",
-        "import sys",
-        "import json as _json",
-        "import subprocess",
-        "import runpy",
-        f"_files = {files_dict!r}",
-        "def _materialize_and_run():",
-        "  _orig_cwd = os.getcwd()",
-        "  with tempfile.TemporaryDirectory() as td:",
-        "    for rel_path, content in _files.items():",
-        "      full_path = os.path.join(td, rel_path)",
-        "      os.makedirs(os.path.dirname(full_path), exist_ok=True)",
-        "      mode = 'wb' if isinstance(content, bytes) else 'w'",
-        "      with open(full_path, mode) as f:",
-        "        f.write(content)",
-        "    os.chdir(td)",
-        "    try:",
-    ]
+    "import os",
+    "import tempfile",
+    "import sys",
+    "import json as _json",
+    "import subprocess",
+    "import runpy",
+    f"_files = {files_dict!r}",
+    "def _materialize_and_run():",
+    "  _orig_cwd = os.getcwd()",
+    "  with tempfile.TemporaryDirectory() as td:",
+    "    _real_base = os.path.realpath(td)",
+    "    for rel_path, content in _files.items():",
+    "      _safe = os.path.realpath(os.path.join(td, rel_path))",
+    "      if not _safe.startswith(_real_base + os.sep):",
+    "        raise ValueError(f'Path traversal detected: {rel_path!r}')",
+    "      full_path = _safe",
+    "      os.makedirs(os.path.dirname(full_path), exist_ok=True)",
+    "      mode = 'wb' if isinstance(content, bytes) else 'w'",
+    "      with open(full_path, mode) as f:",
+    "        f.write(content)",
+    "    os.chdir(td)",
+    "    try:",
+]
 
     if ext == "py":
       argv_list = [file_path]
