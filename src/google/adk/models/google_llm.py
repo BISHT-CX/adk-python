@@ -91,6 +91,25 @@ class Gemini(BaseLlm):
     model: The name of the Gemini model.
     use_interactions_api: Whether to use the interactions API for model
       invocation.
+
+  Customizing the underlying Client:
+    To set ``google.genai.Client`` options ADK doesn't expose as fields
+    directly (location, project, credentials, http_options, etc.),
+    subclass ``Gemini`` and override the ``api_client`` property::
+
+        from functools import cached_property
+        from google.adk.models import Gemini
+        from google.genai import Client
+
+        class GlobalGemini(Gemini):
+          @cached_property
+          def api_client(self) -> Client:
+            return Client(vertexai=True, location="global")
+
+        agent = Agent(model=GlobalGemini(model="gemini-3-pro-preview"))
+
+    Use ``@property`` instead of ``@cached_property`` if you hit asyncio
+    lock contention in multithreaded code.
   """
 
   model: str = 'gemini-2.5-flash'
